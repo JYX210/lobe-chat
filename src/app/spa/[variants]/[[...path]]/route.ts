@@ -3,12 +3,11 @@ import { OG_URL } from '@lobechat/const';
 
 import { getServerFeatureFlagsValue } from '@/config/featureFlags';
 import { OFFICIAL_URL } from '@/const/url';
-import { isCustomORG, isDesktop } from '@/const/version';
+import { isCustomORG } from '@/const/version';
 import { analyticsEnv } from '@/envs/analytics';
 import { appEnv } from '@/envs/app';
 import { fileEnv } from '@/envs/file';
 import { pythonEnv } from '@/envs/python';
-import { type Locales } from '@/locales/resources';
 import { getServerGlobalConfig } from '@/server/globalConfig';
 import { translation } from '@/server/translation';
 import { serializeForHtml } from '@/server/utils/serializeForHtml';
@@ -19,22 +18,7 @@ import {
 } from '@/types/spaServerConfig';
 import { RouteVariants } from '@/utils/server/routeVariants';
 
-export function generateStaticParams() {
-  const mobileOptions = isDesktop ? [false] : [true, false];
-  const staticLocales: Locales[] = ['en-US', 'zh-CN'];
-
-  const variants: { variants: string }[] = [];
-
-  for (const locale of staticLocales) {
-    for (const isMobile of mobileOptions) {
-      variants.push({
-        variants: RouteVariants.serializeVariants({ isMobile, locale }),
-      });
-    }
-  }
-
-  return variants;
-}
+export const dynamic = 'force-dynamic';
 
 const isDev = process.env.NODE_ENV === 'development';
 const VITE_DEV_ORIGIN = 'http://localhost:9876';
