@@ -38,7 +38,7 @@ jobs:
       - name: Build and deploy
         run: |
           npx vercel build --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel deploy --prebuilt --prod --yes --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
         env:
           KEY_VAULTS_SECRET: ${{ secrets.KEY_VAULTS_SECRET }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lobe_chat
