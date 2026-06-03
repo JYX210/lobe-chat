@@ -15,6 +15,20 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lobe_chat
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v6
 
@@ -27,5 +41,7 @@ jobs:
           npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           KEY_VAULTS_SECRET: ${{ secrets.KEY_VAULTS_SECRET }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lobe_chat
+          DATABASE_DRIVER: node
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
