@@ -38,10 +38,12 @@ jobs:
       - name: Build and deploy
         run: |
           npx vercel build --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel deploy --prebuilt --prod --yes --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
+          DEPLOY_URL=$(npx vercel deploy --prebuilt --prod --yes --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | grep -o 'https://[^ ]*\.vercel\.app' | head -1)
+          echo "Deployed to: $DEPLOY_URL"
         env:
           KEY_VAULTS_SECRET: ${{ secrets.KEY_VAULTS_SECRET }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lobe_chat
           DATABASE_DRIVER: node
+          NEXT_PUBLIC_APP_URL: https://jyxlobe.duckdns.org
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
