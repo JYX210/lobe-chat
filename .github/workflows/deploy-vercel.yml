@@ -35,6 +35,9 @@ jobs:
       - name: Setup Node.js, pnpm and bun
         uses: ./.github/actions/setup-env
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Run database migrations (production)
         run: bun run db:migrate
         env:
