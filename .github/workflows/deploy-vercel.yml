@@ -35,14 +35,21 @@ jobs:
       - name: Setup Node.js, pnpm and bun
         uses: ./.github/actions/setup-env
 
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Run database migrations (production)
-        run: bun run db:migrate
+        run: |
+          mkdir -p /tmp/mig && cd /tmp/mig && npm init -y --quiet >/dev/null 2>&1 && npm install pg --quiet 2>&1 | tail -1
+          NODE_PATH=/tmp/mig/node_modules node -e "
+          const { Client } = require('pg');
+          const client = new Client({ connectionString: process.env.DATABASE_URL });
+          client.connect().then(() => {
+            return client.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS agent_onboarding jsonb;');
+          }).then(res => {
+            console.log('Migration OK:', res.command);
+            return client.end();
+          }).catch(e => { console.error(e); process.exit(1); });
+          "
         env:
           DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
-          DATABASE_DRIVER: node
 
       - name: Build and deploy
         run: |
