@@ -53,8 +53,8 @@ jobs:
 
       - name: Build and deploy
         run: |
-          npx vercel build --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
-          DEPLOY_URL=$(npx vercel deploy --prebuilt --prod --yes --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | grep -o 'https://[^ ]*\.vercel\.app' | head -1)
+          npx vercel build --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
+          DEPLOY_URL=$(npx vercel deploy --prebuilt --prod --yes --archive=tgz --token="${{ secrets.VERCEL_TOKEN }}" 2>&1 | grep -o 'https://[^ ]*\.vercel\.app' | head -1)
           echo "Deployed to: $DEPLOY_URL"
         env:
           KEY_VAULTS_SECRET: ${{ secrets.KEY_VAULTS_SECRET }}
