@@ -1,6 +1,6 @@
 {
   "installCommand": "npx pnpm@10.26.2 install --ignore-scripts",
-  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
+  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:spa:raw && pnpm run build:spa:copy && pnpm run build:next:raw",
   "headers": [
     {
       "source": "/_spa/(.*)",
