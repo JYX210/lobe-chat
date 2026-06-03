@@ -1,6 +1,6 @@
 {
   "installCommand": "npx pnpm@10.26.2 install --ignore-scripts",
-  "buildCommand": "echo hello && bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
+  "buildCommand": "echo hello",
   "headers": [
     {
       "source": "/_spa/(.*)",
