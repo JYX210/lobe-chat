@@ -1,6 +1,6 @@
 {
   "installCommand": "npx pnpm@10.26.2 install --ignore-scripts",
-  "buildCommand": "npx cross-env NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:spa:raw && npx cross-env NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:spa:copy && npx cross-env NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:next:raw",
+  "buildCommand": "echo hello && bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
   "headers": [
     {
       "source": "/_spa/(.*)",
