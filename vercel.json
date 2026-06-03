@@ -1,4 +1,5 @@
 {
+  "installCommand": "bun install --frozen-lockfile",
   "buildCommand": "export NODE_OPTIONS=\"--max-old-space-size=6144\" && bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
   "headers": [
     {
@@ -49,7 +50,6 @@
       ]
     }
   ],
-  "installCommand": "npx pnpm@10.26.2 install",
   "rewrites": [
     {
       "source": "/_dangerous_local_dev_proxy",
