@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
   workflow_dispatch:
 
 concurrency:
@@ -16,14 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup Node.js and pnpm
+      - name: Setup Node.js, pnpm and bun
         uses: ./.github/actions/setup-env
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Deploy to Vercel
+      - name: Build and deploy
         run: |
-          npx vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+          npx vercel build --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
-          NODE_OPTIONS: --max-old-space-size=4096
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
