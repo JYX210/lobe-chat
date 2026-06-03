@@ -1,5 +1,5 @@
 {
-  "buildCommand": "export NODE_OPTIONS=\"--max-old-space-size=4096\" && bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
+  "buildCommand": "export NODE_OPTIONS=\"--max-old-space-size=6144\" && bun run build:spa:raw && bun run build:spa:copy && bun run build:next:raw",
   "headers": [
     {
       "source": "/_spa/(.*)",
