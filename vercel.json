@@ -1,6 +1,6 @@
 {
-  "installCommand": "npx pnpm@10.26.2 install --ignore-scripts",
-  "buildCommand": "echo hello",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:spa:raw && pnpm run build:spa:copy && pnpm run build:next:raw",
   "headers": [
     {
       "source": "/_spa/(.*)",
