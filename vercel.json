@@ -1,6 +1,6 @@
 {
-  "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 pnpm run build:spa:raw && pnpm run build:spa:copy && pnpm run build:next:raw",
+  "installCommand": "echo '[vercel] deps pre-installed, skipping pnpm install'",
+  "buildCommand": "echo '[vercel] running build...' && pnpm run build:spa:raw && pnpm run build:spa:copy && pnpm run build:next:raw",
   "headers": [
     {
       "source": "/_spa/(.*)",

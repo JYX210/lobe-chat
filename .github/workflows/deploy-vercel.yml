@@ -35,6 +35,18 @@ jobs:
       - name: Setup Node.js, pnpm and bun
         uses: ./.github/actions/setup-env
 
+      - name: Print environment info
+        run: |
+          echo "=== Node ===" && node --version
+          echo "=== pnpm ===" && pnpm --version
+          echo "=== bun ===" && bun --version
+          echo "=== Vercel CLI ===" && npx vercel --version
+          echo "=== disk free ===" && df -h
+          echo "=== memory ===" && free -m
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
       - name: Run database migrations (production)
         run: |
           mkdir -p /tmp/mig && cd /tmp/mig && npm init -y --quiet >/dev/null 2>&1 && npm install pg --quiet 2>&1 | tail -1
@@ -53,7 +65,16 @@ jobs:
 
       - name: Build and deploy
         run: |
-          npx vercel build --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
+          echo "=== Running vercel build ==="
+          set -o pipefail
+          npx vercel build --prod --yes --debug --token="${{ secrets.VERCEL_TOKEN }}" 2>&1 | tee /tmp/vercel-build.log
+          VERCEL_EXIT=$?
+          echo "=== vercel build exit code: $VERCEL_EXIT ==="
+          if [ "$VERCEL_EXIT" -ne 0 ]; then
+            echo "=== Last 100 lines of build log ==="
+            tail -100 /tmp/vercel-build.log
+            exit $VERCEL_EXIT
+          fi
           DEPLOY_URL=$(npx vercel deploy --prebuilt --prod --yes --archive=tgz --token="${{ secrets.VERCEL_TOKEN }}" 2>&1 | grep -o 'https://[^ ]*\.vercel\.app' | head -1)
           echo "Deployed to: $DEPLOY_URL"
         env:
@@ -63,3 +84,5 @@ jobs:
           NEXT_PUBLIC_APP_URL: https://jyxlobe.duckdns.org
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_DEBUG: 1
+          DEBUG: vercel:*
